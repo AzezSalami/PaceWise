@@ -37,6 +37,10 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
+      # The executable flag is lost when files are uploaded from Windows or through the website.
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
       - name: Run tests
         run: ./gradlew :shared:test
 
