@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.PaceWiseWear" parent="@android:style/Theme.DeviceDefault">
+        <item name="android:windowBackground">@android:color/black</item>
+        <!-- The run screen uses horizontal paging, so the system swipe-to-close is turned off. -->
+        <item name="android:windowSwipeToDismiss">false</item>
+    </style>
+</resources>
