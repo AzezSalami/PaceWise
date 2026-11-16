@@ -1,0 +1,27 @@
+# Checks for newer versions of the app's libraries, Gradle plugins and the Gradle wrapper
+# every weekday, and opens a pull request for each update. Nothing is merged automatically.
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 5
+    groups:
+      # The Kotlin plugins (android, jvm, compose, serialization) must share one version.
+      kotlin:
+        patterns:
+          - "org.jetbrains.kotlin*"
+          - "com.google.devtools.ksp*"
+      androidx:
+        patterns:
+          - "androidx.*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    groups:
+      actions:
+        patterns:
+          - "*"
