@@ -51,21 +51,21 @@ kotlin {
 dependencies {
     implementation(project(":shared"))
 
-    implementation(platform("androidx.compose:compose-bom:2025.12.01"))
+    implementation(platform("androidx.compose:compose-bom:2026.09.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.wear.compose:compose-material:1.5.6")
     implementation("androidx.wear.compose:compose-foundation:1.5.6")
     implementation("androidx.activity:activity-compose:1.11.0")
-    implementation("androidx.core:core-ktx:1.17.0")
+    implementation("androidx.core:core-ktx:1.19.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.4")
     implementation("androidx.lifecycle:lifecycle-service:2.9.4")
 
-    implementation("androidx.health:health-services-client:1.0.0")
+    implementation("androidx.health:health-services-client:1.1.0")
     implementation("androidx.concurrent:concurrent-futures-ktx:1.2.0")
     // Health Services returns ListenableFuture; the type has to be on the compile classpath.
     implementation("com.google.guava:guava:31.1-android")
-    implementation("androidx.wear:wear-ongoing:1.0.0")
+    implementation("androidx.wear:wear-ongoing:1.1.0")
     implementation("com.google.android.gms:play-services-wearable:19.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
 }
