@@ -66,6 +66,6 @@ dependencies {
     // Health Services returns ListenableFuture; the type has to be on the compile classpath.
     implementation("com.google.guava:guava:31.1-android")
     implementation("androidx.wear:wear-ongoing:1.0.0")
-    implementation("com.google.android.gms:play-services-wearable:19.0.0")
+    implementation("com.google.android.gms:play-services-wearable:20.0.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
 }
