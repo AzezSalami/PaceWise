@@ -1,6 +1,7 @@
 package app.pacewise.data
 
 import android.content.Context
+import app.pacewise.shared.Backup
 import app.pacewise.shared.Completion
 import app.pacewise.shared.PaceCalc
 import app.pacewise.shared.PlanGenerator
@@ -119,6 +120,38 @@ class Repository(context: Context) {
     fun saveWatchSettings(w: WatchSettings) {
         write("watch.json", WatchSettings.serializer(), w)
         _watch.value = w
+    }
+
+    /** Everything in one file, for moving to another phone. */
+    @Synchronized
+    fun exportBackup(): ByteArray = Backup(
+        exportedEpochMs = System.currentTimeMillis(),
+        profile = _profile.value, plan = _plan.value, completions = _completions.value,
+        runs = _runs.value.map { loadRun(it.id) ?: it },
+        reminders = _reminders.value, watchSettings = _watch.value,
+    ).encode()
+
+    /**
+     * Restores a backup. Profile, plan and settings are replaced; runs are merged, so runs
+     * already on this phone are kept. Returns the backup that was applied, or throws if the
+     * file is not a PaceWise backup.
+     */
+    @Synchronized
+    fun importBackup(bytes: ByteArray): Backup {
+        val b = Backup.decode(bytes)
+        b.profile?.let { p ->
+            write("profile.json", Profile.serializer(), p)
+            _profile.value = p
+            // Use the saved plan so progress lines up exactly; rebuild only if it is missing.
+            val plan = b.plan ?: PlanGenerator.generate(p)
+            write("plan.json", TrainingPlan.serializer(), plan)
+            _plan.value = plan
+            saveCompletions(b.completions)
+        }
+        b.runs.forEach { saveRun(it) }
+        saveReminders(b.reminders)
+        saveWatchSettings(b.watchSettings)
+        return b
     }
 
     /** What gets pushed to the watch: the next four weeks of runs plus coaching settings. */

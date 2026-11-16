@@ -31,6 +31,7 @@ import app.pacewise.sync.PhoneSync
 import app.pacewise.ui.PaceWiseTheme
 import app.pacewise.ui.PlanScreen
 import app.pacewise.ui.ProgressScreen
+import app.pacewise.ui.RestoreOnSetup
 import app.pacewise.ui.RunDetailScreen
 import app.pacewise.ui.RunsScreen
 import app.pacewise.ui.SettingsScreen
@@ -55,7 +56,7 @@ class MainActivity : ComponentActivity() {
             PaceWiseTheme {
                 val profile by repo.profile.collectAsStateWithLifecycle()
                 if (profile == null) {
-                    SetupWizard(initial = null, onCancel = null) { p ->
+                    SetupWizard(initial = null, onCancel = null, restore = { RestoreOnSetup(repo) }) { p ->
                         repo.saveProfile(p)
                         PhoneSync.pushPlan(this)
                         Reminders.scheduleAll(this)

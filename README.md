@@ -30,6 +30,7 @@ Plans are generated from your race date, goal time, experience, runs per week an
 - **Plan**: every week with phase, focus and distance; tap a session for details, mark it done or skipped.
 - **Progress**: totals, streak, plan adherence, weekly distance against plan, race prediction, pace and heart-rate trends, time on target.
 - **Runs**: every synced run with route, pace, heart rate, elevation and cadence charts, splits and per-step results. Runs can also be added by hand.
+- **Move to another phone** (Settings): Export writes the plan, progress, all runs and settings to one `.pwbackup` file; Import (also offered on the first setup screen) restores it.
 - **Reminders** (Settings): workout-day reminder, evening-before heads-up, "haven't run yet" nudge and a weekly summary, each with its own switch and time.
 
 ## Watch app

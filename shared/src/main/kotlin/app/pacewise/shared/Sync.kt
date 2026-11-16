@@ -54,3 +54,30 @@ object SyncProtocol {
     fun encodeRun(run: RunRecord): ByteArray = gzip(json.encodeToString(RunRecord.serializer(), run))
     fun decodeRun(bytes: ByteArray): RunRecord = json.decodeFromString(RunRecord.serializer(), gunzip(bytes))
 }
+
+/** Everything the phone app stores, in one file, for moving to another phone. */
+@Serializable
+data class Backup(
+    val version: Int = 1,
+    val exportedEpochMs: Long = 0,
+    val profile: Profile? = null,
+    val plan: TrainingPlan? = null,
+    val completions: Map<String, Completion> = emptyMap(),
+    /** Full runs including samples. */
+    val runs: List<RunRecord> = emptyList(),
+    val reminders: ReminderSettings = ReminderSettings(),
+    val watchSettings: WatchSettings = WatchSettings(),
+) {
+    fun encode(): ByteArray = SyncProtocol.gzip(SyncProtocol.json.encodeToString(serializer(), this))
+
+    companion object {
+        const val FILE_EXTENSION = "pwbackup"
+
+        /** Throws if the bytes are not a PaceWise backup. */
+        fun decode(bytes: ByteArray): Backup {
+            val b = SyncProtocol.json.decodeFromString(serializer(), SyncProtocol.gunzip(bytes))
+            require(b.version in 1..1) { "Unsupported backup version ${b.version}" }
+            return b
+        }
+    }
+}

@@ -169,6 +169,9 @@ fun SettingsScreen(repo: Repository, onBack: () -> Unit, onEditPlan: () -> Unit)
                     FilterChip(profile.units == Units.MI, { repo.saveProfile(profile.copy(units = Units.MI), regenerate = false); PhoneSync.pushPlan(ctx) }, label = { Text("Miles") })
                 }
             }
+            // --- backup
+            SectionTitle("Move to another phone")
+            BackupCard(repo)
             Spacer(Modifier.height(16.dp))
         }
     }

@@ -74,7 +74,7 @@ private fun recommended(level: Level): Set<TrainingMethod> = when (level) {
 /** Four friendly steps: race, runner, method, schedule. Also used to change an existing plan. */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun SetupWizard(initial: Profile?, onCancel: (() -> Unit)?, onDone: (Profile) -> Unit) {
+fun SetupWizard(initial: Profile?, onCancel: (() -> Unit)?, restore: (@Composable () -> Unit)? = null, onDone: (Profile) -> Unit) {
     var step by rememberSaveable { mutableIntStateOf(0) }
     var p by remember {
         mutableStateOf(initial ?: Profile(raceDate = LocalDate.now().plusWeeks(18).with(DayOfWeek.SUNDAY).toString()))
@@ -106,7 +106,10 @@ fun SetupWizard(initial: Profile?, onCancel: (() -> Unit)?, onDone: (Profile) ->
             Spacer(Modifier.height(16.dp))
 
             when (step) {
-                0 -> RaceStep(p) { p = it }
+                0 -> {
+                    restore?.invoke()
+                    RaceStep(p) { p = it }
+                }
                 1 -> RunnerStep(p) { p = it }
                 2 -> MethodStep(p) { m ->
                     p = p.copy(method = m, daysPerWeek = m.defaultDays, planWeeks = m.defaultWeeks)

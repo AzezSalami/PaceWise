@@ -186,4 +186,18 @@ class SharedTest {
         val text = SyncProtocol.json.encodeToString(WatchPayload.serializer(), payload)
         assertEquals(payload, SyncProtocol.json.decodeFromString(WatchPayload.serializer(), text))
     }
+
+    @Test fun backupRoundTrip() {
+        val profile = Profile(raceDate = "2027-04-25", method = TrainingMethod.VDOT, units = Units.MI)
+        val plan = PlanGenerator.generate(profile, today)
+        val run = RunRecord(id = "r1", startEpochMs = 1_800_000_000_000, durationS = 1800, distanceM = 5000,
+            samples = listOf(Sample(0, 0f, hr = 120, lat = 52.1, lon = 4.3), Sample(5, 14f, hr = 125)))
+        val backup = Backup(
+            exportedEpochMs = 123, profile = profile, plan = plan, completions = mapOf("a" to Completion.SKIPPED),
+            runs = listOf(run), reminders = ReminderSettings(hour = 6, eveningBefore = true), watchSettings = WatchSettings(cueIntervalS = 30),
+        )
+        assertEquals(backup, Backup.decode(backup.encode()))
+        assertTrue(runCatching { Backup.decode("not a backup".toByteArray()) }.isFailure)
+        assertTrue(runCatching { Backup.decode(SyncProtocol.gzip("{\"version\":99}")) }.isFailure)
+    }
 }
